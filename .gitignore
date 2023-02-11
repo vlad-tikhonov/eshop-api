@@ -38,3 +38,4 @@ lerna-debug.log*
 .env
 visualisation.drawio
 docker-compose.yml
+/mongo-data-4.4
