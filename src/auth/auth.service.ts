@@ -1,35 +1,16 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { ModelType } from '@typegoose/typegoose/lib/types';
-import { InjectModel } from 'nestjs-typegoose';
-import { AuthDto } from './dto/auth.dto';
 import { UserModel } from './user.model';
-import { compare, genSalt, hash } from 'bcryptjs';
+import { compare } from 'bcryptjs';
 import { USER_NOT_FOUND_ERROR, WRONG_PASSWORD_ERROR } from './auth.constants';
 import { JwtService } from '@nestjs/jwt';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class AuthService {
-	constructor(
-		@InjectModel(UserModel) private readonly userModel: ModelType<UserModel>,
-		private readonly jwtService: JwtService,
-	) {}
-
-	async createUser(dto: AuthDto) {
-		const salt = await genSalt(10);
-		const newUser = new this.userModel({
-			email: dto.login,
-			passwordHash: await hash(dto.password, salt),
-		});
-
-		return newUser.save();
-	}
-
-	async findUser(email: string) {
-		return this.userModel.findOne({ email }).exec();
-	}
+	constructor(private readonly jwtService: JwtService, private readonly userService: UserService) {}
 
 	async validateUser(email: string, password: string): Promise<Pick<UserModel, 'email'>> {
-		const user = await this.findUser(email);
+		const user = await this.userService.findUser(email);
 
 		if (!user) {
 			throw new UnauthorizedException(USER_NOT_FOUND_ERROR);
