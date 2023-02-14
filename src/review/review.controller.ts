@@ -11,8 +11,6 @@ import {
 	ValidationPipe,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
-import { UserInfo } from '../decorators/user-info.decorator';
-import { UserModel } from '../user/user.model';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { REVIEW_NOT_FOUNT_ERROR } from './review.constants';
 import { ReviewService } from './review.service';
@@ -37,9 +35,9 @@ export class ReviewController {
 			throw new NotFoundException(REVIEW_NOT_FOUNT_ERROR);
 		}
 	}
-	//delete decorator
+
 	@Get('byProduct/:productId')
-	async getByProduct(@Param('productId') productId: string, @UserInfo() user: UserModel) {
+	async getByProduct(@Param('productId') productId: string) {
 		return this.reviewService.findByProductId(productId);
 	}
 }
