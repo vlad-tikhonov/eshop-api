@@ -1,4 +1,4 @@
-import { IsString, IsEnum, IsDate, IsNumber } from 'class-validator';
+import { IsString, IsEnum, IsDateString, IsNumber } from 'class-validator';
 import { Sex } from '../user.model';
 
 export class CreateUserDto {
@@ -11,7 +11,7 @@ export class CreateUserDto {
 	@IsString()
 	phone: string;
 
-	@IsDate()
+	@IsDateString()
 	birthDate: Date;
 
 	@IsString()

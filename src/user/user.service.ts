@@ -14,6 +14,14 @@ export class UserService {
 		const newUser = new this.userModel({
 			email: dto.login,
 			passwordHash: await hash(dto.password, salt),
+			phone: dto.phone,
+			birthDate: dto.birthDate,
+			name: dto.name,
+			surname: dto.surname,
+			sex: dto.sex,
+			region: dto.region,
+			locality: dto.locality,
+			card: dto.card,
 		});
 
 		return newUser.save();

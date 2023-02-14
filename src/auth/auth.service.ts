@@ -1,15 +1,15 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { UserModel } from './user.model';
 import { compare } from 'bcryptjs';
 import { USER_NOT_FOUND_ERROR, WRONG_PASSWORD_ERROR } from './auth.constants';
 import { JwtService } from '@nestjs/jwt';
-import { UserService } from 'src/user/user.service';
+import { UserService } from '../user/user.service';
+import { UserModel } from '../user/user.model';
 
 @Injectable()
 export class AuthService {
 	constructor(private readonly jwtService: JwtService, private readonly userService: UserService) {}
 
-	async validateUser(email: string, password: string): Promise<Pick<UserModel, 'email'>> {
+	async validateUser(email: string, password: string): Promise<UserModel> {
 		const user = await this.userService.findUser(email);
 
 		if (!user) {
@@ -22,14 +22,23 @@ export class AuthService {
 			throw new UnauthorizedException(WRONG_PASSWORD_ERROR);
 		}
 
-		return { email: user.email };
+		return user;
 	}
 
-	async login(email: string) {
-		const payload = { email };
+	async login(user: UserModel) {
+		const payload = {
+			email: user.email,
+			name: user.name,
+			surname: user.surname,
+			birthDate: user.birthDate,
+			sex: user.sex,
+			region: user.region,
+			locality: user.locality,
+			card: user.card,
+		};
 
 		return {
-			access_token: await this.jwtService.signAsync(payload),
+			access_token: await this.jwtService.signAsync({ payload }),
 		};
 	}
 }
