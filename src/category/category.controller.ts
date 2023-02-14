@@ -1,17 +1,50 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+	Body,
+	Controller,
+	Delete,
+	Get,
+	NotFoundException,
+	Param,
+	Patch,
+	Post,
+} from '@nestjs/common';
+import { CATEGORY_NOTFOUND_ERROR } from './category.constants';
+import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 
 @Controller('category')
 export class CategoryController {
+	constructor(private readonly categoryService: CategoryService) {}
+
 	@Post('create')
-	async create(@Body() dto: CreateCategoryDto) {}
+	async create(@Body() dto: CreateCategoryDto) {
+		return this.categoryService.create(dto);
+	}
 
-	@Get(':id')
-	async get(@Param('id') id: string) {}
-
-	@Delete(':id')
-	async delete(@Param('id') id: string) {}
+	@Get('all')
+	async getAll() {
+		return this.categoryService.getAll();
+	}
 
 	@Patch(':id')
-	async patch(@Param('id') id: string, @Body() dto: CreateCategoryDto) {}
+	async patch(@Param('id') id: string, @Body() dto: CreateCategoryDto) {
+		const updatedCategory = await this.categoryService.updateById(id, dto);
+
+		if (!updatedCategory) {
+			throw new NotFoundException(CATEGORY_NOTFOUND_ERROR);
+		}
+
+		return updatedCategory;
+	}
+
+	@Delete(':id')
+	async delete(@Param('id') id: string) {
+		const deletedCategory = await this.categoryService.delete(id);
+
+		if (!deletedCategory) {
+			throw new NotFoundException(CATEGORY_NOTFOUND_ERROR);
+		}
+
+		return deletedCategory;
+	}
 }

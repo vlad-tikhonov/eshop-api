@@ -1,5 +1,6 @@
 import { prop } from '@typegoose/typegoose';
 import { Base, TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
+import { Types } from 'mongoose';
 
 class ProductDescription {
 	@prop()
@@ -36,7 +37,7 @@ export class ProductModel extends TimeStamps {
 	description: ProductDescription;
 
 	@prop()
-	category: string;
+	categoryId: Types.ObjectId;
 
 	@prop({ type: () => [String], _id: false })
 	tags: string[];
