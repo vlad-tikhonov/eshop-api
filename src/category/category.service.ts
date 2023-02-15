@@ -6,7 +6,9 @@ import { CreateCategoryDto } from './dto/create-category.dto';
 
 @Injectable()
 export class CategoryService {
-	constructor(@InjectModel(CategoryModel) private categoryModel: ModelType<CategoryModel>) {}
+	constructor(
+		@InjectModel(CategoryModel) private readonly categoryModel: ModelType<CategoryModel>,
+	) {}
 
 	async create(dto: CreateCategoryDto): Promise<DocumentType<CategoryModel>> {
 		return this.categoryModel.create(dto);
@@ -25,5 +27,20 @@ export class CategoryService {
 
 	async delete(id: string): Promise<DocumentType<CategoryModel> | null> {
 		return this.categoryModel.findByIdAndDelete(id).exec();
+	}
+
+	async findByText(text: string): Promise<DocumentType<CategoryModel>[]> {
+		return this.categoryModel
+			.aggregate([
+				{
+					$match: {
+						title: {
+							$regex: text,
+							$options: 'i',
+						},
+					},
+				},
+			])
+			.exec();
 	}
 }

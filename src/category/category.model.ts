@@ -6,6 +6,9 @@ export class CategoryModel extends TimeStamps {
 	@prop()
 	image: string;
 
-	@prop()
+	@prop({ unique: true })
 	title: string;
+
+	@prop({ unique: true })
+	slug: string;
 }

@@ -9,6 +9,7 @@ import { TypegooseModule } from 'nestjs-typegoose';
 import { ConfigService } from '@nestjs/config/dist';
 import { getMongoConfig } from './configs/mongo.config';
 import { UserModule } from './user/user.module';
+import { SearchModule } from './search/search.module';
 
 @Module({
 	imports: [
@@ -24,6 +25,7 @@ import { UserModule } from './user/user.module';
 		ReviewModule,
 		OrderModule,
 		UserModule,
+		SearchModule,
 	],
 })
 export class AppModule {}

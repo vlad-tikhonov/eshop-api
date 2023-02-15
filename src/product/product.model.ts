@@ -18,7 +18,7 @@ export class ProductModel extends TimeStamps {
 	@prop()
 	image: string;
 
-	@prop()
+	@prop({ unique: true })
 	title: string;
 
 	@prop()
@@ -28,7 +28,7 @@ export class ProductModel extends TimeStamps {
 	priceWithCard: number;
 
 	@prop()
-	discount: number;
+	discount?: number;
 
 	@prop()
 	calculatedRating: number;

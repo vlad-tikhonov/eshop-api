@@ -7,7 +7,10 @@ import {
 	Param,
 	Patch,
 	Post,
+	UsePipes,
+	ValidationPipe,
 } from '@nestjs/common';
+import { IdValidationPipe } from '../pipes/id-validation.pipe';
 import { CATEGORY_NOTFOUND_ERROR } from './category.constants';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
@@ -16,6 +19,7 @@ import { CreateCategoryDto } from './dto/create-category.dto';
 export class CategoryController {
 	constructor(private readonly categoryService: CategoryService) {}
 
+	@UsePipes(new ValidationPipe())
 	@Post('create')
 	async create(@Body() dto: CreateCategoryDto) {
 		return this.categoryService.create(dto);
@@ -27,7 +31,7 @@ export class CategoryController {
 	}
 
 	@Patch(':id')
-	async patch(@Param('id') id: string, @Body() dto: CreateCategoryDto) {
+	async patch(@Param('id', IdValidationPipe) id: string, @Body() dto: CreateCategoryDto) {
 		const updatedCategory = await this.categoryService.updateById(id, dto);
 
 		if (!updatedCategory) {
@@ -38,7 +42,7 @@ export class CategoryController {
 	}
 
 	@Delete(':id')
-	async delete(@Param('id') id: string) {
+	async delete(@Param('id', IdValidationPipe) id: string) {
 		const deletedCategory = await this.categoryService.delete(id);
 
 		if (!deletedCategory) {
@@ -47,4 +51,7 @@ export class CategoryController {
 
 		return deletedCategory;
 	}
+}
+function UsePipe() {
+	throw new Error('Function not implemented.');
 }

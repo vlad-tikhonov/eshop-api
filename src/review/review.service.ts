@@ -8,7 +8,7 @@ import { DeleteResult } from 'mongodb';
 
 @Injectable()
 export class ReviewService {
-	constructor(@InjectModel(ReviewModel) private reviewModel: ModelType<ReviewModel>) {}
+	constructor(@InjectModel(ReviewModel) private readonly reviewModel: ModelType<ReviewModel>) {}
 
 	async create(dto: CreateReviewDto): Promise<DocumentType<ReviewModel>> {
 		return this.reviewModel.create(dto);
