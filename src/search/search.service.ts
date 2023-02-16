@@ -16,12 +16,14 @@ export class SearchService {
 		categories: DocumentType<CategoryModel>[];
 		products: DocumentType<ProductModel>[];
 	}> {
-		const productResult = await this.productService.findByText(text);
-		const categoryResult = await this.categoryService.findByText(text);
+		const result = await Promise.all([
+			this.productService.findByText(text),
+			this.categoryService.findByText(text),
+		]);
 
 		return {
-			categories: categoryResult,
-			products: productResult,
+			products: result[0],
+			categories: result[1],
 		};
 	}
 }
