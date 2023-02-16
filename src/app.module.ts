@@ -10,6 +10,7 @@ import { ConfigService } from '@nestjs/config/dist';
 import { getMongoConfig } from './configs/mongo.config';
 import { UserModule } from './user/user.module';
 import { SearchModule } from './search/search.module';
+import { FilesModule } from './files/files.module';
 
 @Module({
 	imports: [
@@ -26,6 +27,7 @@ import { SearchModule } from './search/search.module';
 		OrderModule,
 		UserModule,
 		SearchModule,
+		FilesModule,
 	],
 })
 export class AppModule {}

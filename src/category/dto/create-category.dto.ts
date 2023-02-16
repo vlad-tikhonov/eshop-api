@@ -1,7 +1,9 @@
 import { IsString } from 'class-validator';
+import { HasMimeType, IsFile, MemoryStoredFile } from 'nestjs-form-data';
 export class CreateCategoryDto {
-	@IsString()
-	image: string;
+	@IsFile()
+	@HasMimeType(['image/jpeg', 'image/png'])
+	image: MemoryStoredFile;
 
 	@IsString()
 	title: string;

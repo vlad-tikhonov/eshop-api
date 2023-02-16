@@ -10,6 +10,7 @@ import {
 	UsePipes,
 	ValidationPipe,
 } from '@nestjs/common';
+import { FormDataRequest } from 'nestjs-form-data';
 import { IdValidationPipe } from '../pipes/id-validation.pipe';
 import { CATEGORY_NOTFOUND_ERROR } from './category.constants';
 import { CategoryService } from './category.service';
@@ -19,8 +20,9 @@ import { CreateCategoryDto } from './dto/create-category.dto';
 export class CategoryController {
 	constructor(private readonly categoryService: CategoryService) {}
 
-	@UsePipes(new ValidationPipe())
 	@Post('create')
+	@UsePipes(new ValidationPipe())
+	@FormDataRequest()
 	async create(@Body() dto: CreateCategoryDto) {
 		return this.categoryService.create(dto);
 	}
@@ -51,7 +53,4 @@ export class CategoryController {
 
 		return deletedCategory;
 	}
-}
-function UsePipe() {
-	throw new Error('Function not implemented.');
 }

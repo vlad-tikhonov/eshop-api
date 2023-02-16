@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
+import { NestjsFormDataModule } from 'nestjs-form-data';
 import { TypegooseModule } from 'nestjs-typegoose';
+import { FilesModule } from 'src/files/files.module';
 import { CategoryController } from './category.controller';
 import { CategoryModel } from './category.model';
 import { CategoryService } from './category.service';
@@ -15,6 +17,8 @@ import { CategoryService } from './category.service';
 				},
 			},
 		]),
+		NestjsFormDataModule,
+		FilesModule,
 	],
 	providers: [CategoryService],
 	exports: [CategoryService],
