@@ -30,10 +30,7 @@ export class ProductModel extends TimeStamps {
 	@prop()
 	discount?: number;
 
-	@prop()
-	calculatedRating: number;
-
-	@prop({ type: () => ProductDescription })
+	@prop({ type: () => ProductDescription, _id: false })
 	description: ProductDescription;
 
 	@prop()

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { DocumentType, ModelType } from '@typegoose/typegoose/lib/types';
 import { Types } from 'mongoose';
 import { InjectModel } from 'nestjs-typegoose';
+import { FilesService } from 'src/files/files.service';
 import { ReviewModel } from 'src/review/review.model';
 import { CreateProductDto } from './dto/create-product.dto';
 import { FindProductDto } from './dto/find-product.dto';
@@ -9,10 +10,30 @@ import { ProductModel } from './product.model';
 
 @Injectable()
 export class ProductService {
-	constructor(@InjectModel(ProductModel) private readonly productModel: ModelType<ProductModel>) {}
+	constructor(
+		@InjectModel(ProductModel) private readonly productModel: ModelType<ProductModel>,
+		private readonly filesService: FilesService,
+	) {}
 
 	async create(dto: CreateProductDto): Promise<DocumentType<ProductModel>> {
-		return this.productModel.create(dto);
+		const imageUrl = await this.filesService.saveFile(dto.image, 'product');
+		const newProduct = new this.productModel({
+			image: imageUrl,
+			title: dto.title,
+			price: dto.price,
+			priceWithCard: dto.priceWithCard,
+			discount: dto.discount,
+			description: {
+				brand: dto.description.brand,
+				country: dto.description.country,
+				package: dto.description.package,
+			},
+			categoryId: dto.categoryId,
+			tags: dto.tags,
+			code: dto.code,
+		});
+
+		return newProduct.save();
 	}
 
 	async deleteById(id: string): Promise<DocumentType<ProductModel> | null> {

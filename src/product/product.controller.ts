@@ -11,6 +11,8 @@ import {
 	UsePipes,
 	ValidationPipe,
 } from '@nestjs/common';
+import { FormDataRequest } from 'nestjs-form-data';
+import { ParseFormDataJsonPipe } from 'src/pipes/parse-form-data-json.pipe';
 import { IdValidationPipe } from '../pipes/id-validation.pipe';
 import { CreateProductDto } from './dto/create-product.dto';
 import { FindProductDto } from './dto/find-product.dto';
@@ -21,8 +23,9 @@ import { ProductService } from './product.service';
 export class ProductController {
 	constructor(private readonly productService: ProductService) {}
 
-	@UsePipes(new ValidationPipe())
 	@Post('create')
+	@FormDataRequest()
+	@UsePipes(new ParseFormDataJsonPipe({ props: ['description', 'tags'] }), new ValidationPipe())
 	async create(@Body() dto: CreateProductDto) {
 		return this.productService.create(dto);
 	}

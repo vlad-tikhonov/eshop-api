@@ -1,6 +1,6 @@
-import { Type } from 'class-transformer';
 import { IsString, IsNumber, IsArray, ValidateNested, Max, Min, IsOptional } from 'class-validator';
-
+import { HasMimeType, IsFile, MemoryStoredFile } from 'nestjs-form-data';
+import { Type } from 'class-transformer';
 class ProductDescriptionDto {
 	@IsString()
 	brand: string;
@@ -13,22 +13,27 @@ class ProductDescriptionDto {
 }
 
 export class CreateProductDto {
-	@IsString()
-	image: string;
+	@IsFile()
+	@HasMimeType(['image/jpeg', 'image/png'])
+	image: MemoryStoredFile;
 
 	@IsString()
+	@Type(() => String)
 	title: string;
 
 	@IsNumber()
+	@Type(() => Number)
 	price: number;
 
 	@IsNumber()
+	@Type(() => Number)
 	priceWithCard: number;
 
 	@Min(1)
 	@Max(90)
 	@IsNumber()
 	@IsOptional()
+	@Type(() => Number)
 	discount?: number;
 
 	@ValidateNested()
@@ -36,6 +41,7 @@ export class CreateProductDto {
 	description: ProductDescriptionDto;
 
 	@IsString()
+	@Type(() => String)
 	categoryId: string;
 
 	@IsArray()
@@ -43,5 +49,6 @@ export class CreateProductDto {
 	tags: string[];
 
 	@IsString()
+	@Type(() => String)
 	code: string;
 }
