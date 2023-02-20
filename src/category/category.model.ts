@@ -11,4 +11,7 @@ export class CategoryModel extends TimeStamps {
 
 	@prop({ unique: true })
 	slug: string;
+
+	@prop({ unique: true })
+	orderId: number;
 }

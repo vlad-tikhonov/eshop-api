@@ -18,6 +18,7 @@ export class CategoryService {
 			image: imageUrl,
 			title: dto.title,
 			slug: dto.slug,
+			orderId: dto.orderId,
 		});
 
 		return newCategory.save();
