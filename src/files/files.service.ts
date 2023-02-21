@@ -12,9 +12,11 @@ export class FilesService {
 		await ensureDir(uploadFolder);
 
 		const buffer = await this.convertToWebP(file.buffer);
-		await writeFile(`${uploadFolder}/${file.originalName}`, buffer);
+		const newFileName = `${file.originalName.split('.')[0]}.webp`;
 
-		return `${folderName}/${file.originalName}`;
+		await writeFile(`${uploadFolder}/${newFileName}`, buffer);
+
+		return `${folderName}/${newFileName}`;
 	}
 
 	async convertToWebP(file: Buffer): Promise<Buffer> {
