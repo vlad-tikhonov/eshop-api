@@ -21,8 +21,8 @@ export class CategoryController {
 	constructor(private readonly categoryService: CategoryService) {}
 
 	@Post('create')
-	@UsePipes(new ValidationPipe())
 	@FormDataRequest()
+	@UsePipes(new ValidationPipe())
 	async create(@Body() dto: CreateCategoryDto) {
 		return this.categoryService.create(dto);
 	}

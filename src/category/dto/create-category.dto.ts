@@ -1,4 +1,4 @@
-import { IsNumber, IsString } from 'class-validator';
+import { IsString } from 'class-validator';
 import { HasMimeType, IsFile, MemoryStoredFile } from 'nestjs-form-data';
 export class CreateCategoryDto {
 	@IsFile()
@@ -11,6 +11,6 @@ export class CreateCategoryDto {
 	@IsString()
 	slug: string;
 
-	@IsNumber()
+	@IsString()
 	orderId: number;
 }
