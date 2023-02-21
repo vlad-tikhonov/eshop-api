@@ -12,5 +12,5 @@ export class CreateCategoryDto {
 	slug: string;
 
 	@IsString()
-	orderId: number;
+	orderId: string;
 }

@@ -28,6 +28,10 @@ export class CategoryService {
 		return this.categoryModel.find().exec();
 	}
 
+	async getBySlug(slug: string): Promise<DocumentType<CategoryModel> | null> {
+		return this.categoryModel.findOne({ slug: slug }).exec();
+	}
+
 	async updateById(
 		id: string,
 		dto: CreateCategoryDto,
