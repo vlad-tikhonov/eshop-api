@@ -13,7 +13,6 @@ export class FilesService {
 
 		const buffer = await this.convertToWebP(file.buffer);
 		const newFileName = `${fileName}.webp`;
-		// const newFileName = `${file.originalName.split('.')[0]}.webp`;
 
 		await writeFile(`${uploadFolder}/${newFileName}`, buffer);
 
