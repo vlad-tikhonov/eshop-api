@@ -44,6 +44,10 @@ export class CreateProductDto {
 	@Type(() => String)
 	categoryId: string;
 
+	@IsString()
+	@Type(() => String)
+	categorySlug: string;
+
 	@IsArray()
 	@IsString({ each: true })
 	tags: string[];

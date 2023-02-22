@@ -29,6 +29,7 @@ export class ProductService {
 				package: dto.description.package,
 			},
 			categoryId: dto.categoryId,
+			categorySlug: dto.categorySlug,
 			tags: dto.tags,
 			code: dto.code,
 		});
