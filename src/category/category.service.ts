@@ -14,10 +14,10 @@ export class CategoryService {
 	) {}
 
 	async create(dto: CreateCategoryDto): Promise<DocumentType<CategoryModel>> {
-		const productId = new Types.ObjectId().toHexString();
-		const imageUrl = await this.filesService.saveFile(dto.image, 'category', productId);
+		const categoryId = new Types.ObjectId().toHexString();
+		const imageUrl = await this.filesService.saveFile(dto.image, 'category', categoryId);
 		const newCategory = new this.categoryModel({
-			_id: productId,
+			_id: categoryId,
 			image: imageUrl,
 			title: dto.title,
 			slug: dto.slug,

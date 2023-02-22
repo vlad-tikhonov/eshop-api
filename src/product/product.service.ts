@@ -19,6 +19,7 @@ export class ProductService {
 		const productId = new Types.ObjectId().toHexString();
 		const imageUrl = await this.filesService.saveFile(dto.image, 'product', productId);
 		const newProduct = new this.productModel({
+			_id: productId,
 			image: imageUrl,
 			title: dto.title,
 			price: dto.price,
