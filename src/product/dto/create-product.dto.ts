@@ -14,7 +14,7 @@ class ProductDescriptionDto {
 
 export class CreateProductDto {
 	@IsFile()
-	@HasMimeType(['image/jpeg', 'image/png'])
+	@HasMimeType(['image/jpeg', 'image/png', 'image/webp'])
 	image: MemoryStoredFile;
 
 	@IsString()
