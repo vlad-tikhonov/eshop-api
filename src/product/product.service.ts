@@ -52,10 +52,6 @@ export class ProductService {
 		return this.productModel.find({ categoryId: new Types.ObjectId(categoryId) }).exec();
 	}
 
-	async findBySlug(dto: FindProductsDto): Promise<DocumentType<ProductModel>[]> {
-		return this.productModel.find({ categorySlug: dto.categorySlug }).exec();
-	}
-
 	async findByText(text: string): Promise<DocumentType<ProductModel>[]> {
 		return this.productModel
 			.aggregate([
@@ -66,6 +62,35 @@ export class ProductService {
 							$options: 'i',
 						},
 					},
+				},
+			])
+			.exec();
+	}
+
+	async findBySlug(dto: FindProductsDto): Promise<DocumentType<ProductModel>[]> {
+		// return this.productModel.find({ categorySlug: dto.categorySlug }).exec();
+		return this.productModel
+			.aggregate([
+				{
+					$match: {
+						categorySlug: dto.categorySlug,
+					},
+				},
+				{
+					$lookup: {
+						from: 'Review',
+						localField: '_id',
+						foreignField: 'productId',
+						as: 'reviews',
+					},
+				},
+				{
+					$addFields: {
+						rating: { $avg: '$reviews.rating' },
+					},
+				},
+				{
+					$unset: 'reviews',
 				},
 			])
 			.exec();
