@@ -6,13 +6,14 @@ import { MemoryStoredFile } from 'nestjs-form-data';
 
 @Injectable()
 export class FilesService {
-	async saveFile(file: MemoryStoredFile, folderName: string): Promise<string> {
+	async saveFile(file: MemoryStoredFile, folderName: string, fileName: string): Promise<string> {
 		const uploadFolder = `${path}/uploads/${folderName}`;
 
 		await ensureDir(uploadFolder);
 
 		const buffer = await this.convertToWebP(file.buffer);
-		const newFileName = `${file.originalName.split('.')[0]}.webp`;
+		const newFileName = `${fileName}.webp`;
+		// const newFileName = `${file.originalName.split('.')[0]}.webp`;
 
 		await writeFile(`${uploadFolder}/${newFileName}`, buffer);
 

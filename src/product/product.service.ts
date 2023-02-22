@@ -16,7 +16,8 @@ export class ProductService {
 	) {}
 
 	async create(dto: CreateProductDto): Promise<DocumentType<ProductModel>> {
-		const imageUrl = await this.filesService.saveFile(dto.image, 'product');
+		const productId = new Types.ObjectId().toHexString();
+		const imageUrl = await this.filesService.saveFile(dto.image, 'product', productId);
 		const newProduct = new this.productModel({
 			image: imageUrl,
 			title: dto.title,

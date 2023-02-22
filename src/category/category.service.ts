@@ -4,6 +4,7 @@ import { InjectModel } from 'nestjs-typegoose';
 import { FilesService } from 'src/files/files.service';
 import { CategoryModel } from './category.model';
 import { CreateCategoryDto } from './dto/create-category.dto';
+import { Types } from 'mongoose';
 
 @Injectable()
 export class CategoryService {
@@ -13,8 +14,10 @@ export class CategoryService {
 	) {}
 
 	async create(dto: CreateCategoryDto): Promise<DocumentType<CategoryModel>> {
-		const imageUrl = await this.filesService.saveFile(dto.image, 'category');
+		const productId = new Types.ObjectId().toHexString();
+		const imageUrl = await this.filesService.saveFile(dto.image, 'category', productId);
 		const newCategory = new this.categoryModel({
+			_id: productId,
 			image: imageUrl,
 			title: dto.title,
 			slug: dto.slug,
