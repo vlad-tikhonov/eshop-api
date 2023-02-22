@@ -6,6 +6,7 @@ import { FilesService } from 'src/files/files.service';
 import { ReviewModel } from 'src/review/review.model';
 import { CreateProductDto } from './dto/create-product.dto';
 import { FindProductDto } from './dto/find-product.dto';
+import { FindProductsDto } from './dto/find-products.dto';
 import { ProductModel } from './product.model';
 
 @Injectable()
@@ -49,6 +50,10 @@ export class ProductService {
 
 	async getByCategoryId(categoryId: string): Promise<DocumentType<ProductModel>[]> {
 		return this.productModel.find({ categoryId: new Types.ObjectId(categoryId) }).exec();
+	}
+
+	async findBySlug(dto: FindProductsDto): Promise<DocumentType<ProductModel>[]> {
+		return this.productModel.find({ categorySlug: dto.categorySlug }).exec();
 	}
 
 	async findByText(text: string): Promise<DocumentType<ProductModel>[]> {

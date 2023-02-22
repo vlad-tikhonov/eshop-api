@@ -16,6 +16,7 @@ import { ParseFormDataJsonPipe } from 'src/pipes/parse-form-data-json.pipe';
 import { IdValidationPipe } from '../pipes/id-validation.pipe';
 import { CreateProductDto } from './dto/create-product.dto';
 import { FindProductDto } from './dto/find-product.dto';
+import { FindProductsDto } from './dto/find-products.dto';
 import { PRODUCT_NOTFOUND_ERROR } from './product.constants';
 import { ProductService } from './product.service';
 
@@ -37,8 +38,15 @@ export class ProductController {
 		return this.productService.findWithReviews(dto);
 	}
 
+	@Post('bySlug')
+	@HttpCode(200)
+	@UsePipes(new ValidationPipe())
+	async findProducts(@Body() dto: FindProductsDto) {
+		return this.productService.findBySlug(dto);
+	}
+
 	@Get(':categoryId')
-	async get(@Param('categoryId', IdValidationPipe) categoryId: string) {
+	async getgetByCategoryId(@Param('categoryId', IdValidationPipe) categoryId: string) {
 		const product = await this.productService.getByCategoryId(categoryId);
 
 		if (!product) {
