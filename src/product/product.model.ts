@@ -37,6 +37,9 @@ export class ProductModel extends TimeStamps {
 	categoryId: Types.ObjectId;
 
 	@prop()
+	categoryTitle: string;
+
+	@prop()
 	categorySlug: string;
 
 	@prop({ type: () => [String], _id: false })
