@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { NestjsFormDataModule } from 'nestjs-form-data';
 import { TypegooseModule } from 'nestjs-typegoose';
+import { CategoryModule } from 'src/category/category.module';
 import { FilesModule } from 'src/files/files.module';
 import { ProductController } from './product.controller';
 import { ProductModel } from './product.model';
@@ -19,6 +20,7 @@ import { ProductService } from './product.service';
 		]),
 		NestjsFormDataModule,
 		FilesModule,
+		CategoryModule,
 	],
 	providers: [ProductService],
 	exports: [ProductService],

@@ -11,13 +11,14 @@ import {
 	UsePipes,
 	ValidationPipe,
 } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common/exceptions';
 import { FormDataRequest } from 'nestjs-form-data';
 import { ParseFormDataJsonPipe } from 'src/pipes/parse-form-data-json.pipe';
 import { IdValidationPipe } from '../pipes/id-validation.pipe';
 import { CreateProductDto } from './dto/create-product.dto';
 import { FindProductDto } from './dto/find-product.dto';
 import { FindProductsDto } from './dto/find-products.dto';
-import { PRODUCT_NOTFOUND_ERROR } from './product.constants';
+import { CATEGORY_NOTFOUND_ERROR, PRODUCT_NOTFOUND_ERROR } from './product.constants';
 import { ProductService } from './product.service';
 
 @Controller('product')
@@ -28,7 +29,13 @@ export class ProductController {
 	@FormDataRequest()
 	@UsePipes(new ParseFormDataJsonPipe({ props: ['description', 'tags'] }), new ValidationPipe())
 	async create(@Body() dto: CreateProductDto) {
-		return this.productService.create(dto);
+		const createdProduct = await this.productService.create(dto);
+
+		if (!createdProduct) {
+			throw new BadRequestException(CATEGORY_NOTFOUND_ERROR);
+		}
+
+		return createdProduct;
 	}
 
 	@UsePipes(new ValidationPipe())
