@@ -55,4 +55,8 @@ export class CreateProductDto {
 	@IsString()
 	@Type(() => String)
 	code: string;
+
+	@IsString()
+	@Type(() => String)
+	slug: string;
 }

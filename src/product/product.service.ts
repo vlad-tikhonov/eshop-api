@@ -35,6 +35,7 @@ export class ProductService {
 			categorySlug: dto.categorySlug,
 			tags: dto.tags,
 			code: dto.code,
+			slug: dto.slug,
 		});
 
 		return newProduct.save();

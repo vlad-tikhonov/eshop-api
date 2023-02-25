@@ -44,4 +44,7 @@ export class ProductModel extends TimeStamps {
 
 	@prop()
 	code: string;
+
+	@prop({ unique: true })
+	slug: string;
 }
