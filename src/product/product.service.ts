@@ -69,7 +69,6 @@ export class ProductService {
 	}
 
 	async findBySlug(dto: FindProductsDto): Promise<DocumentType<ProductModel>[]> {
-		// return this.productModel.find({ categorySlug: dto.categorySlug }).exec();
 		return this.productModel
 			.aggregate([
 				{
@@ -95,6 +94,10 @@ export class ProductService {
 				},
 			])
 			.exec();
+	}
+
+	async getBySlug(slug: string): Promise<DocumentType<ProductModel> | null> {
+		return this.productModel.findOne({ slug }).exec();
 	}
 
 	async findWithReviews(dto: FindProductDto) {

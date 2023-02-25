@@ -45,8 +45,13 @@ export class ProductController {
 		return this.productService.findBySlug(dto);
 	}
 
+	@Get('bySlug/:slug')
+	async getProductBySlug(@Param('slug') slug: string) {
+		return this.productService.getBySlug(slug);
+	}
+
 	@Get(':categoryId')
-	async getgetByCategoryId(@Param('categoryId', IdValidationPipe) categoryId: string) {
+	async getByCategoryId(@Param('categoryId', IdValidationPipe) categoryId: string) {
 		const product = await this.productService.getByCategoryId(categoryId);
 
 		if (!product) {
