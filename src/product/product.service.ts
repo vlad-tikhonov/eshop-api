@@ -78,7 +78,7 @@ export class ProductService {
 			.exec();
 	}
 
-	async findBySlug(dto: FindProductsDto): Promise<DocumentType<ProductModel>[]> {
+	async findByCategorySlug(dto: FindProductsDto): Promise<DocumentType<ProductModel>[]> {
 		return this.productModel
 			.aggregate([
 				{

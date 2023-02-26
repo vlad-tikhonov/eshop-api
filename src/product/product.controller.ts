@@ -53,7 +53,7 @@ export class ProductController {
 	@HttpCode(200)
 	@UsePipes(new ValidationPipe())
 	async findProducts(@Body() dto: FindProductsDto) {
-		return this.productService.findBySlug(dto);
+		return this.productService.findByCategorySlug(dto);
 	}
 
 	@Get('bySlug/:slug')
