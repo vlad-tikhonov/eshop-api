@@ -18,7 +18,11 @@ import { IdValidationPipe } from '../pipes/id-validation.pipe';
 import { CreateProductDto } from './dto/create-product.dto';
 import { FindProductDto } from './dto/find-product.dto';
 import { FindProductsDto } from './dto/find-products.dto';
-import { CATEGORY_NOTFOUND_ERROR, PRODUCT_NOTFOUND_ERROR } from './product.constants';
+import {
+	CATEGORY_NOTFOUND_ERROR,
+	PRODUCT_ID_NOTFOUND_ERROR,
+	PRODUCT_SLUG_NOTFOUND_ERROR,
+} from './product.constants';
 import { ProductService } from './product.service';
 
 @Controller('product')
@@ -54,7 +58,13 @@ export class ProductController {
 
 	@Get('bySlug/:slug')
 	async getProductBySlug(@Param('slug') slug: string) {
-		return this.productService.getBySlug(slug);
+		const result = await this.productService.getBySlug(slug);
+
+		if (!result.length) {
+			throw new NotFoundException(PRODUCT_SLUG_NOTFOUND_ERROR);
+		}
+
+		return result[0];
 	}
 
 	@Get(':categoryId')
@@ -62,7 +72,7 @@ export class ProductController {
 		const product = await this.productService.getByCategoryId(categoryId);
 
 		if (!product) {
-			throw new NotFoundException(PRODUCT_NOTFOUND_ERROR);
+			throw new NotFoundException(PRODUCT_ID_NOTFOUND_ERROR);
 		}
 
 		return product;
@@ -73,7 +83,7 @@ export class ProductController {
 		const deletedProduct = await this.productService.deleteById(id);
 
 		if (!deletedProduct) {
-			throw new NotFoundException(PRODUCT_NOTFOUND_ERROR);
+			throw new NotFoundException(PRODUCT_ID_NOTFOUND_ERROR);
 		}
 	}
 
@@ -82,7 +92,7 @@ export class ProductController {
 		const updatedProduct = await this.productService.updateById(id, dto);
 
 		if (!updatedProduct) {
-			throw new NotFoundException(PRODUCT_NOTFOUND_ERROR);
+			throw new NotFoundException(PRODUCT_ID_NOTFOUND_ERROR);
 		}
 
 		return updatedProduct;

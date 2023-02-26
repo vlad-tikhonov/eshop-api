@@ -106,8 +106,56 @@ export class ProductService {
 			.exec();
 	}
 
-	async getBySlug(slug: string): Promise<DocumentType<ProductModel> | null> {
-		return this.productModel.findOne({ slug }).exec();
+	async getBySlug(slug: string) {
+		return this.productModel
+			.aggregate([
+				{
+					$match: {
+						slug,
+					},
+				},
+				{
+					$lookup: {
+						from: 'Review',
+						localField: '_id',
+						foreignField: 'productId',
+						as: 'reviews',
+					},
+				},
+				{
+					$lookup: {
+						from: 'Product',
+						let: { slug: '$slug' },
+						pipeline: [
+							{
+								$match: {
+									slug: {
+										$not: {
+											$eq: slug,
+										},
+									},
+								},
+							},
+							{
+								$limit: 4,
+							},
+						],
+						as: 'relatedProducts',
+					},
+				},
+				{
+					$addFields: {
+						reviewsCount: { $size: '$reviews' },
+						reviewsAvg: { $avg: '$reviews.rating' },
+					},
+				},
+			])
+			.exec() as unknown as (ProductModel & {
+			relatedProducts: ProductModel[];
+			review: ReviewModel[];
+			reviewsCount: number;
+			reviewsAvg: number;
+		})[];
 	}
 
 	async findWithReviews(dto: FindProductDto) {
@@ -133,15 +181,15 @@ export class ProductService {
 				},
 				{
 					$addFields: {
-						reviewCount: { $size: '$reviews' },
-						reviewAvg: { $avg: '$reviews.rating' },
+						reviewsCount: { $size: '$reviews' },
+						reviewsAvg: { $avg: '$reviews.rating' },
 					},
 				},
 			])
 			.exec() as unknown as (ProductModel & {
 			review: ReviewModel[];
-			reviewCount: number;
-			reviewAvg: number;
+			reviewsCount: number;
+			reviewsAvg: number;
 		})[];
 	}
 }
