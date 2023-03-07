@@ -192,4 +192,19 @@ export class ProductService {
 			reviewsAvg: number;
 		})[];
 	}
+
+	async getPromotions() {
+		return this.productModel.aggregate([
+			{
+				$match: {
+					discount: {
+						$ne: null,
+					},
+				},
+			},
+			{
+				$limit: 4,
+			},
+		]);
+	}
 }

@@ -29,6 +29,13 @@ import { ProductService } from './product.service';
 export class ProductController {
 	constructor(private readonly productService: ProductService) {}
 
+	@UsePipes(new ValidationPipe())
+	@HttpCode(200)
+	@Post()
+	async find(@Body() dto: FindProductDto) {
+		return this.productService.findWithReviews(dto);
+	}
+
 	@Post('create')
 	@FormDataRequest()
 	@UsePipes(new ParseFormDataJsonPipe({ props: ['description', 'tags'] }), new ValidationPipe())
@@ -42,11 +49,9 @@ export class ProductController {
 		return createdProduct;
 	}
 
-	@UsePipes(new ValidationPipe())
-	@HttpCode(200)
-	@Post()
-	async find(@Body() dto: FindProductDto) {
-		return this.productService.findWithReviews(dto);
+	@Get('promotions')
+	async getPromotions() {
+		return this.productService.getPromotions();
 	}
 
 	@Post('bySlug')
