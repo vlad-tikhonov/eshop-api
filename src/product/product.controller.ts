@@ -54,6 +54,11 @@ export class ProductController {
 		return this.productService.getPromotions();
 	}
 
+	@Get('novelties')
+	async getNovelties() {
+		return this.productService.getNovelties();
+	}
+
 	@Post('bySlug')
 	@HttpCode(200)
 	@UsePipes(new ValidationPipe())

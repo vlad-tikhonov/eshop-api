@@ -203,7 +203,31 @@ export class ProductService {
 				},
 			},
 			{
-				$limit: 4,
+				$sample: { size: 4 },
+			},
+			{
+				$lookup: {
+					from: 'Review',
+					localField: '_id',
+					foreignField: 'productId',
+					as: 'reviews',
+				},
+			},
+			{
+				$addFields: {
+					reviewsAvg: { $avg: '$reviews.rating' },
+				},
+			},
+			{
+				$unset: 'reviews',
+			},
+		]);
+	}
+
+	async getNovelties() {
+		return this.productModel.aggregate([
+			{
+				$sample: { size: 4 },
 			},
 		]);
 	}
