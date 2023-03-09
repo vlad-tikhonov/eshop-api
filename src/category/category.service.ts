@@ -50,7 +50,9 @@ export class CategoryService {
 		return this.categoryModel.findByIdAndDelete(id).exec();
 	}
 
-	async findByText(text: string): Promise<DocumentType<CategoryModel>[]> {
+	async findByText(
+		text: string,
+	): Promise<DocumentType<{ _id: Types.ObjectId; title: string; slug: string }>[]> {
 		return this.categoryModel
 			.aggregate([
 				{

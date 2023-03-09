@@ -9,6 +9,6 @@ export class SearchController {
 	@HttpCode(200)
 	@Post()
 	async categoryAndProductQuery(@Body() dto: CategoryProductQueryDto) {
-		return this.searchService.categoryAndProductQuery(dto.query);
+		return this.searchService.searchProductsAndCategories(dto.query);
 	}
 }

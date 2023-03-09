@@ -63,7 +63,9 @@ export class ProductService {
 		return this.productModel.find({ categoryId: new Types.ObjectId(categoryId) }).exec();
 	}
 
-	async findByText(text: string): Promise<DocumentType<ProductModel>[]> {
+	async findByText(
+		text: string,
+	): Promise<DocumentType<{ _id: Types.ObjectId; title: string; slug: string }>[]> {
 		return this.productModel
 			.aggregate([
 				{

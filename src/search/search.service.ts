@@ -1,10 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { DocumentType } from '@typegoose/typegoose';
-import { CategoryModel } from 'src/category/category.model';
 import { CategoryService } from 'src/category/category.service';
-import { ProductModel } from 'src/product/product.model';
 import { ProductService } from 'src/product/product.service';
-
+import { ProductsAndCategoriesResult } from './types/products-and-categories';
 @Injectable()
 export class SearchService {
 	constructor(
@@ -12,18 +9,20 @@ export class SearchService {
 		private readonly categoryService: CategoryService,
 	) {}
 
-	async categoryAndProductQuery(text: string): Promise<{
-		categories: DocumentType<CategoryModel>[];
-		products: DocumentType<ProductModel>[];
-	}> {
-		const result = await Promise.all([
+	async searchProductsAndCategories(text: string): Promise<ProductsAndCategoriesResult[]> {
+		const [products, categories] = await Promise.all([
 			this.productService.findByText(text),
 			this.categoryService.findByText(text),
 		]);
 
-		return {
-			products: result[0],
-			categories: result[1],
-		};
+		const constructResult = (data: typeof products | typeof categories, type: string) =>
+			data.map((el) => ({
+				_id: el._id,
+				title: el.title,
+				slug: el.slug,
+				type: type,
+			}));
+
+		return [...constructResult(products, 'product'), ...constructResult(categories, 'category')];
 	}
 }
