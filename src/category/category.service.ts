@@ -61,6 +61,13 @@ export class CategoryService {
 						},
 					},
 				},
+				{
+					$project: {
+						_id: 1,
+						title: 1,
+						slug: 1,
+					},
+				},
 			])
 			.exec();
 	}
