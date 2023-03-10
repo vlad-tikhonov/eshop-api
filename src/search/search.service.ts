@@ -13,7 +13,6 @@ export class SearchService {
 			id: string;
 			title: string;
 			slug: string;
-			categorySlug?: string;
 			type: string;
 		}[]
 	> {
@@ -21,14 +20,11 @@ export class SearchService {
 			this.productService.findByText(text),
 			this.categoryService.findByText(text),
 		]);
-		console.log(products);
-		console.log(categories);
 
 		const resultProducts = products.map((p) => ({
 			id: p._id.toHexString(),
 			title: p.title,
-			slug: p.slug,
-			categorySlug: p.categorySlug,
+			slug: `${p.categorySlug}/${p.slug}`,
 			type: 'product',
 		}));
 
