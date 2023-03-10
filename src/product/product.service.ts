@@ -65,7 +65,9 @@ export class ProductService {
 
 	async findByText(
 		text: string,
-	): Promise<DocumentType<{ _id: Types.ObjectId; title: string; slug: string }>[]> {
+	): Promise<
+		DocumentType<{ _id: Types.ObjectId; title: string; categorySlug: string; slug: string }>[]
+	> {
 		return this.productModel
 			.aggregate([
 				{
@@ -80,6 +82,7 @@ export class ProductService {
 					$project: {
 						_id: 1,
 						title: 1,
+						categorySlug: 1,
 						slug: 1,
 					},
 				},

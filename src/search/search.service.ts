@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CategoryService } from 'src/category/category.service';
 import { ProductService } from 'src/product/product.service';
-import { ProductsAndCategoriesResult } from './types/products-and-categories';
 @Injectable()
 export class SearchService {
 	constructor(
@@ -9,20 +8,37 @@ export class SearchService {
 		private readonly categoryService: CategoryService,
 	) {}
 
-	async searchProductsAndCategories(text: string): Promise<ProductsAndCategoriesResult[]> {
+	async searchProductsAndCategories(text: string): Promise<
+		{
+			id: string;
+			title: string;
+			slug: string;
+			categorySlug?: string;
+			type: string;
+		}[]
+	> {
 		const [products, categories] = await Promise.all([
 			this.productService.findByText(text),
 			this.categoryService.findByText(text),
 		]);
+		console.log(products);
+		console.log(categories);
 
-		const constructResult = (data: typeof products | typeof categories, type: string) =>
-			data.map((el) => ({
-				_id: el._id,
-				title: el.title,
-				slug: el.slug,
-				type: type,
-			}));
+		const resultProducts = products.map((p) => ({
+			id: p._id.toHexString(),
+			title: p.title,
+			slug: p.slug,
+			categorySlug: p.categorySlug,
+			type: 'product',
+		}));
 
-		return [...constructResult(products, 'product'), ...constructResult(categories, 'category')];
+		const resultCategories = categories.map((c) => ({
+			id: c._id.toHexString(),
+			title: c.title,
+			slug: c.slug,
+			type: 'category',
+		}));
+
+		return [...resultProducts, ...resultCategories];
 	}
 }
