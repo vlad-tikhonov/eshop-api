@@ -39,6 +39,10 @@ export class SearchService {
 			type: 'category',
 		}));
 
-		return [...resultProducts, ...resultCategories];
+		const sortedResult = [...resultProducts, ...resultCategories].sort((a, b) =>
+			a.title > b.title ? 1 : -1,
+		);
+
+		return sortedResult;
 	}
 }
