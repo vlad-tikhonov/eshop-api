@@ -8,9 +8,6 @@ export class ReviewModel extends TimeStamps {
 	name: string;
 
 	@prop()
-	title: string;
-
-	@prop()
 	description: string;
 
 	@prop()

@@ -5,9 +5,6 @@ export class CreateReviewDto {
 	name: string;
 
 	@IsString()
-	title: string;
-
-	@IsString()
 	description: string;
 
 	@Min(1, { message: REVIEW_RATING_ERROR_LESS })
