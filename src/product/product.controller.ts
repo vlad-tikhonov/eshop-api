@@ -33,7 +33,7 @@ export class ProductController {
 	@HttpCode(200)
 	@Post()
 	async find(@Body() dto: FindProductDto) {
-		return this.productService.findWithReviews(dto);
+		return this.productService.findWithReviewsInfo(dto);
 	}
 
 	@Post('create')

@@ -161,16 +161,18 @@ export class ProductService {
 						reviewsAvg: { $avg: '$reviews.rating' },
 					},
 				},
+				{
+					$unset: 'reviews',
+				},
 			])
 			.exec() as unknown as (ProductModel & {
 			relatedProducts: ProductModel[];
-			review: ReviewModel[];
 			reviewsCount: number;
 			reviewsAvg: number;
 		})[];
 	}
 
-	async findWithReviews(dto: FindProductDto) {
+	async findWithReviewsInfo(dto: FindProductDto) {
 		return this.productModel
 			.aggregate([
 				{
@@ -196,6 +198,9 @@ export class ProductService {
 						reviewsCount: { $size: '$reviews' },
 						reviewsAvg: { $avg: '$reviews.rating' },
 					},
+				},
+				{
+					$unset: 'reviews',
 				},
 			])
 			.exec() as unknown as (ProductModel & {
