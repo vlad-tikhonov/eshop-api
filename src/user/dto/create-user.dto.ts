@@ -1,4 +1,4 @@
-import { IsString, IsEnum, IsDateString, IsNumber } from 'class-validator';
+import { IsString, IsEnum, IsDateString } from 'class-validator';
 import { Sex } from '../user.model';
 
 export class CreateUserDto {
@@ -29,6 +29,6 @@ export class CreateUserDto {
 	@IsString()
 	locality: string;
 
-	@IsNumber()
-	card: number;
+	@IsString()
+	card: string;
 }

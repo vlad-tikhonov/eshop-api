@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ModelType } from '@typegoose/typegoose/lib/types';
+import { DocumentType, ModelType } from '@typegoose/typegoose/lib/types';
 import { genSalt, hash } from 'bcryptjs';
 import { InjectModel } from 'nestjs-typegoose';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -9,7 +9,7 @@ import { UserModel } from './user.model';
 export class UserService {
 	constructor(@InjectModel(UserModel) private readonly userModel: ModelType<UserModel>) {}
 
-	async createUser(dto: CreateUserDto) {
+	async createUser(dto: CreateUserDto): Promise<DocumentType<UserModel>> {
 		const salt = await genSalt(10);
 		const newUser = new this.userModel({
 			email: dto.login,
@@ -27,7 +27,7 @@ export class UserService {
 		return newUser.save();
 	}
 
-	async findUser(email: string) {
+	async findUser(email: string): Promise<DocumentType<UserModel> | null> {
 		return this.userModel.findOne({ email }).exec();
 	}
 }

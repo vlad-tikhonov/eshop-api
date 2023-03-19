@@ -36,5 +36,5 @@ export class UserModel extends TimeStamps {
 	locality: string;
 
 	@prop()
-	card: number;
+	card: string;
 }
