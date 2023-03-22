@@ -51,6 +51,10 @@ export class ProductService {
 		return newProduct.save();
 	}
 
+	async findById(productId: string): Promise<DocumentType<ProductModel> | null> {
+		return this.productModel.findById(productId).exec();
+	}
+
 	async deleteById(id: string): Promise<DocumentType<ProductModel> | null> {
 		return this.productModel.findByIdAndDelete(id).exec();
 	}
