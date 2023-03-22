@@ -1,7 +1,7 @@
-import { IsString, IsNumber } from 'class-validator';
+import { IsNumber, IsMongoId } from 'class-validator';
 
 export class FindProductDto {
-	@IsString()
+	@IsMongoId()
 	productId: string;
 
 	@IsNumber()

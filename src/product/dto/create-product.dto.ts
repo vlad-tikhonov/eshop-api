@@ -1,4 +1,13 @@
-import { IsString, IsNumber, IsArray, ValidateNested, Max, Min, IsOptional } from 'class-validator';
+import {
+	IsString,
+	IsNumber,
+	IsArray,
+	ValidateNested,
+	Max,
+	Min,
+	IsOptional,
+	IsMongoId,
+} from 'class-validator';
 import { HasMimeType, IsFile, MemoryStoredFile } from 'nestjs-form-data';
 import { Type } from 'class-transformer';
 class ProductDescriptionDto {
@@ -40,7 +49,7 @@ export class CreateProductDto {
 	@Type(() => ProductDescriptionDto)
 	description: ProductDescriptionDto;
 
-	@IsString()
+	@IsMongoId()
 	@Type(() => String)
 	categoryId: string;
 

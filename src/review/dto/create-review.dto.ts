@@ -1,4 +1,4 @@
-import { IsString, IsNumber, Max, Min } from 'class-validator';
+import { IsString, IsNumber, Max, Min, IsMongoId } from 'class-validator';
 import { REVIEW_RATING_ERROR_LARGE, REVIEW_RATING_ERROR_LESS } from '../review.constants';
 export class CreateReviewDto {
 	@IsString()
@@ -12,6 +12,6 @@ export class CreateReviewDto {
 	@IsNumber()
 	rating: number;
 
-	@IsString()
+	@IsMongoId()
 	productId: string;
 }
