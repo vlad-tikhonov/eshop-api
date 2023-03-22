@@ -31,8 +31,6 @@ export class OrderController {
 
 	@Get(':userId')
 	async getByUserId(@Param('userId', IdValidationPipe) userId: string) {
-		const result = await this.orderService.getByUserId(userId);
-
-		return result;
+		return await this.orderService.getByUserId(userId);
 	}
 }
