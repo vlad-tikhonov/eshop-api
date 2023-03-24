@@ -2,6 +2,12 @@ import { prop } from '@typegoose/typegoose';
 import { Types } from 'mongoose';
 import { Base, TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
 
+export enum OrderStatus {
+	InProgress = 'inProgress',
+	Received = 'received',
+	Canceled = 'canceled',
+}
+
 class ProductsInfo {
 	@prop()
 	productId: Types.ObjectId;
@@ -14,6 +20,9 @@ export interface OrderModel extends Base {}
 export class OrderModel extends TimeStamps {
 	@prop()
 	userId: Types.ObjectId;
+
+	@prop({ enum: OrderStatus })
+	status: OrderStatus;
 
 	@prop()
 	locality: string;

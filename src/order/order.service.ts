@@ -6,6 +6,7 @@ import { UserService } from 'src/user/user.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { OrderModel } from './order.model';
 import { Types } from 'mongoose';
+import { OrderStatus } from './order.model';
 
 @Injectable()
 export class OrderService {
@@ -38,10 +39,82 @@ export class OrderService {
 			return null;
 		}
 
-		return this.orderModel.create(dto);
+		const orderId = new Types.ObjectId().toHexString();
+
+		const newOrder = new this.orderModel({
+			_id: orderId,
+			status: OrderStatus.InProgress,
+			...dto,
+		});
+
+		return newOrder.save();
 	}
 
 	async getByUserId(userId: string) {
-		return this.orderModel.find({ userId }).exec();
+		return this.orderModel
+			.aggregate([
+				{
+					$match: {
+						userId: new Types.ObjectId(userId),
+					},
+				},
+				{
+					$lookup: {
+						from: 'Product',
+						localField: 'products.productId',
+						foreignField: '_id',
+						as: 'productsData',
+					},
+				},
+				{
+					$project: {
+						_id: 1,
+						status: 1,
+						date: 1,
+						time: 1,
+						products: {
+							$map: {
+								input: '$products',
+								as: 'one',
+								in: {
+									$mergeObjects: [
+										'$$one',
+										{
+											$arrayElemAt: [
+												{
+													$filter: {
+														input: '$productsData',
+														as: 'two',
+														cond: { $eq: ['$$two._id', '$$one.productId'] },
+													},
+												},
+												0,
+											],
+										},
+									],
+								},
+							},
+						},
+					},
+				},
+				{
+					$unwind: '$products',
+				},
+				{
+					$project: {
+						'products.productId': 0,
+					},
+				},
+				{
+					$group: {
+						_id: '$_id',
+						status: { $first: '$status' },
+						date: { $first: '$date' },
+						time: { $first: '$time' },
+						products: { $push: '$products' },
+					},
+				},
+			])
+			.exec();
 	}
 }
