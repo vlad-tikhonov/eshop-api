@@ -80,16 +80,18 @@ export class OrderService {
 									$mergeObjects: [
 										'$$one',
 										{
-											$arrayElemAt: [
-												{
-													$filter: {
-														input: '$productsData',
-														as: 'two',
-														cond: { $eq: ['$$two._id', '$$one.productId'] },
+											product: {
+												$arrayElemAt: [
+													{
+														$filter: {
+															input: '$productsData',
+															as: 'two',
+															cond: { $eq: ['$$two._id', '$$one.productId'] },
+														},
 													},
-												},
-												0,
-											],
+													0,
+												],
+											},
 										},
 									],
 								},
@@ -103,7 +105,6 @@ export class OrderService {
 				{
 					$project: {
 						'products.productId': 0,
-						'products.priceWithCard': 0,
 					},
 				},
 				{
