@@ -111,6 +111,11 @@ export class OrderService {
 						status: { $first: '$status' },
 						date: { $first: '$date' },
 						time: { $first: '$time' },
+						total: {
+							$sum: {
+								$multiply: ['$products.count', '$products.price'],
+							},
+						},
 						products: { $push: '$products' },
 					},
 				},
