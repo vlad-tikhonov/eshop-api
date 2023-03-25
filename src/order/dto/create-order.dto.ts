@@ -1,12 +1,19 @@
-import { IsString, IsArray, ValidateNested, IsOptional, IsMongoId } from 'class-validator';
+import {
+	IsString,
+	IsArray,
+	ValidateNested,
+	IsOptional,
+	IsMongoId,
+	IsNumber,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
 class ProductsInfoDto {
 	@IsMongoId()
 	productId: string;
 
-	@IsString()
-	count: string;
+	@IsNumber()
+	count: number;
 }
 
 export class CreateOrderDto {

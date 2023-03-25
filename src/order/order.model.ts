@@ -13,7 +13,7 @@ class ProductsInfo {
 	productId: Types.ObjectId;
 
 	@prop()
-	count: string;
+	count: number;
 }
 
 export interface OrderModel extends Base {}
