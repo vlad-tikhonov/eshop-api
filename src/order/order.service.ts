@@ -121,7 +121,7 @@ export class OrderService {
 				},
 				{
 					$addFields: {
-						'products.product.rating': {
+						'products.product.reviewsAvg': {
 							$divide: [
 								{
 									$sum: '$products.reviews.rating',
