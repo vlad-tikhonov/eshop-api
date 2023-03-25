@@ -103,6 +103,7 @@ export class OrderService {
 				{
 					$project: {
 						'products.productId': 0,
+						'products.priceWithCard': 0,
 					},
 				},
 				{
