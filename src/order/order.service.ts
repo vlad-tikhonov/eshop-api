@@ -67,6 +67,14 @@ export class OrderService {
 					},
 				},
 				{
+					$lookup: {
+						from: 'Review',
+						localField: 'products.productId',
+						foreignField: 'productId',
+						as: 'reviews',
+					},
+				},
+				{
 					$project: {
 						_id: 1,
 						status: 1,
@@ -93,6 +101,15 @@ export class OrderService {
 												],
 											},
 										},
+										{
+											reviews: {
+												$filter: {
+													input: '$reviews',
+													as: 'three',
+													cond: { $eq: ['$$three.productId', '$$one.productId'] },
+												},
+											},
+										},
 									],
 								},
 							},
@@ -103,8 +120,23 @@ export class OrderService {
 					$unwind: '$products',
 				},
 				{
+					$addFields: {
+						'products.product.rating': {
+							$divide: [
+								{
+									$sum: '$products.reviews.rating',
+								},
+								{
+									$size: '$products.reviews',
+								},
+							],
+						},
+					},
+				},
+				{
 					$project: {
 						'products.productId': 0,
+						'products.reviews': 0,
 					},
 				},
 				{
