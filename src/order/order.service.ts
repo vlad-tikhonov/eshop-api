@@ -115,7 +115,7 @@ export class OrderService {
 						time: { $first: '$time' },
 						total: {
 							$sum: {
-								$multiply: ['$products.count', '$products.price'],
+								$multiply: ['$products.count', '$products.product.price'],
 							},
 						},
 						products: { $push: '$products' },
