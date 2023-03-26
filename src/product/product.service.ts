@@ -112,7 +112,7 @@ export class ProductService {
 				},
 				{
 					$addFields: {
-						rating: { $avg: '$reviews.rating' },
+						reviewsAvg: { $avg: '$reviews.rating' },
 					},
 				},
 				{
@@ -249,6 +249,22 @@ export class ProductService {
 		return this.productModel.aggregate([
 			{
 				$sample: { size: 4 },
+			},
+			{
+				$lookup: {
+					from: 'Review',
+					localField: '_id',
+					foreignField: 'productId',
+					as: 'reviews',
+				},
+			},
+			{
+				$addFields: {
+					reviewsAvg: { $avg: '$reviews.rating' },
+				},
+			},
+			{
+				$unset: 'reviews',
 			},
 		]);
 	}
