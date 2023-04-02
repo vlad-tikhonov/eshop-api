@@ -10,6 +10,7 @@ import {
 	Post,
 	UsePipes,
 	ValidationPipe,
+	UseGuards,
 } from '@nestjs/common';
 import { BadRequestException } from '@nestjs/common/exceptions';
 import { FormDataRequest } from 'nestjs-form-data';
@@ -24,6 +25,10 @@ import {
 	PRODUCT_SLUG_NOTFOUND_ERROR,
 } from './product.constants';
 import { ProductService } from './product.service';
+import { Roles } from '../decorators/roles.decorator';
+import { RolesGuard } from '../guards/roles.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt.guard';
+import { UserRoles } from '../user/user.model';
 
 @Controller('product')
 export class ProductController {
@@ -38,6 +43,8 @@ export class ProductController {
 
 	@Post('create')
 	@FormDataRequest()
+	@Roles(UserRoles.Admin)
+	@UseGuards(JwtAuthGuard, RolesGuard)
 	@UsePipes(new ParseFormDataJsonPipe({ props: ['description', 'tags'] }), new ValidationPipe())
 	async create(@Body() dto: CreateProductDto) {
 		const createdProduct = await this.productService.create(dto);

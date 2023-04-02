@@ -7,6 +7,7 @@ import {
 	Param,
 	Patch,
 	Post,
+	UseGuards,
 	UsePipes,
 	ValidationPipe,
 } from '@nestjs/common';
@@ -15,12 +16,18 @@ import { IdValidationPipe } from '../pipes/id-validation.pipe';
 import { CATEGORY_ID_NOTFOUND_ERROR, CATEGORY_SLUG_NOTFOUND_ERROR } from './category.constants';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
+import { Roles } from '../decorators/roles.decorator';
+import { RolesGuard } from '../guards/roles.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt.guard';
+import { UserRoles } from '../user/user.model';
 
 @Controller('category')
 export class CategoryController {
 	constructor(private readonly categoryService: CategoryService) {}
 
 	@Post('create')
+	@Roles(UserRoles.Admin)
+	@UseGuards(JwtAuthGuard, RolesGuard)
 	@FormDataRequest()
 	@UsePipes(new ValidationPipe())
 	async create(@Body() dto: CreateCategoryDto) {

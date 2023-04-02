@@ -3,7 +3,7 @@ import { DocumentType, ModelType } from '@typegoose/typegoose/lib/types';
 import { genSalt, hash } from 'bcryptjs';
 import { InjectModel } from 'nestjs-typegoose';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UserModel } from './user.model';
+import { UserModel, UserRoles } from './user.model';
 
 @Injectable()
 export class UserService {
@@ -22,6 +22,7 @@ export class UserService {
 			region: dto.region,
 			locality: dto.locality,
 			card: dto.card,
+			roles: [UserRoles.User],
 		});
 
 		return newUser.save();

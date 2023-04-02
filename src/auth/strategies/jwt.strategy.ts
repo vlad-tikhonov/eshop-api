@@ -14,7 +14,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 		});
 	}
 
-	async validate(user: UserModel) {
+	async validate(user: Omit<UserModel, 'passwordHash'>) {
 		return user;
 	}
 }

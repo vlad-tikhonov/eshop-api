@@ -6,6 +6,11 @@ export enum Sex {
 	Female,
 }
 
+export enum UserRoles {
+	User = 'user',
+	Admin = 'admin',
+}
+
 export interface UserModel extends Base {}
 export class UserModel extends TimeStamps {
 	@prop({ unique: true })
@@ -37,4 +42,7 @@ export class UserModel extends TimeStamps {
 
 	@prop()
 	card: string;
+
+	@prop({ type: String, enum: UserRoles, _id: false })
+	roles: UserRoles[];
 }
