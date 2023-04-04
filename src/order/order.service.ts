@@ -122,14 +122,22 @@ export class OrderService {
 				{
 					$addFields: {
 						'products.product.reviewsAvg': {
-							$divide: [
-								{
-									$sum: '$products.reviews.rating',
+							$cond: {
+								if: {
+									$eq: [{ $size: '$products.reviews' }, 0],
 								},
-								{
-									$size: '$products.reviews',
+								then: 0,
+								else: {
+									$divide: [
+										{
+											$sum: '$products.reviews.rating',
+										},
+										{
+											$size: '$products.reviews',
+										},
+									],
 								},
-							],
+							},
 						},
 					},
 				},
