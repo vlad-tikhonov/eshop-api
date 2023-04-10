@@ -16,9 +16,11 @@ export class SearchService {
 			type: string;
 		}[]
 	> {
+		const replacedText = text.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
+
 		const [products, categories] = await Promise.all([
-			this.productService.findByText(text),
-			this.categoryService.findByText(text),
+			this.productService.findByText(replacedText),
+			this.categoryService.findByText(replacedText),
 		]);
 
 		const resultProducts = products.map((p) => ({

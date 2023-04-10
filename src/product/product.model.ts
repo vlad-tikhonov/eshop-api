@@ -18,7 +18,7 @@ export class ProductModel extends TimeStamps {
 	@prop()
 	image: string;
 
-	@prop({ unique: true })
+	@prop()
 	title: string;
 
 	@prop()
